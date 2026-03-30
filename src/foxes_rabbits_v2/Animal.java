@@ -117,4 +117,21 @@ public abstract class Animal
     {
         this.age = age;
     }
+
+    /**
+     * A animal can breed if it has reached the breeding age.
+     * @return true if the animal can breed.
+     * @author Donovan Guerra
+     */
+    public boolean canBreed()
+    {
+        return age > getBreedingAge();
+    }
+
+    /**
+     * @author Donovan Guerra
+     * Returns the breeding age of the animal.
+     * @return The breeding age of the animal.
+     */
+    protected abstract int getBreedingAge();
 }

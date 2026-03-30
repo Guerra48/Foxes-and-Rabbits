@@ -114,12 +114,13 @@ public class Rabbit extends Animal
         return births;
     }
 
-    /**
-     * A rabbit can breed if it has reached the breeding age.
-     * @return true if the rabbit can breed, false otherwise.
+    /** 
+     * @author Donovan Guerra
+     * Returns the breeding age of the rabbit.
+     * @return The breeding age of the rabbit.
      */
-    private boolean canBreed()
-    {
-        return getAge() >= BREEDING_AGE;
+    @Override
+    protected int getBreedingAge() {
+        return BREEDING_AGE;    
     }
 }
