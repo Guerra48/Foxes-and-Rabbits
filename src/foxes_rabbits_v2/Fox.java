@@ -26,13 +26,9 @@ public class Fox extends Animal
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
     private static final int RABBIT_FOOD_VALUE = 9;
-    // A shared random number generator to control breeding.
-    private static final Random rand = Randomizer.getRandom();
     
     // Individual characteristics (instance fields).
-    // The fox's age.
-        //private int age;
-
+ 
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
 
@@ -159,14 +155,7 @@ public class Fox extends Animal
      * if it can breed.
      * @return The number of births (may be zero).
      */
-    private int breed()
-    {
-        int births = 0;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        return births;
-    }
+    
 
     /** 
      * @author Donovan Guerra
@@ -177,4 +166,19 @@ public class Fox extends Animal
     protected int getBreedingAge() {
         return BREEDING_AGE;
     }
+
+    /**
+     * @author Donovan Guerra
+     * @return the breeding probability of the fox.
+     * @return the max litter size of the fox.
+     */
+    @Override
+    protected double BREEDING_PROBABILITY() {
+        return BREEDING_PROBABILITY;
+    }
+    @Override
+    protected int MAX_LITTER_SIZE(){
+        return MAX_LITTER_SIZE;
+    }
 }
+

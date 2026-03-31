@@ -1,6 +1,7 @@
 package foxes_rabbits_v2;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * A class representing shared characteristics of animals.
@@ -19,9 +20,16 @@ public abstract class Animal
 
     /**
      * @author Donovan Guerra
-     * @param age The age of the animal.
      */
+    // The age of the animal.
     private int age;
+    //The breeding probability of the animal.
+    abstract protected double BREEDING_PROBABILITY();
+    // The max litter size of the animal.
+    abstract protected int MAX_LITTER_SIZE();
+    // A shared random number generator to control breeding.
+     protected static final Random rand = Randomizer.getRandom();
+
 
     /**
      * Create a new animal at location in field.
@@ -152,4 +160,17 @@ public abstract class Animal
      * @return The max age of the animal.
      */
     protected abstract int getMaxAge();
+
+    /**
+     * @author Donovan Guerra
+     * Shifted the breed method from the fox and rabbit classes to the animal superclass.
+     */
+    protected int breed()
+    {
+        int births = 0;
+        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY()) {
+            births = rand.nextInt(MAX_LITTER_SIZE()) + 1;
+        }
+        return births;
+    }
 }
