@@ -50,17 +50,17 @@ public class Rabbit extends Animal
      * around. Sometimes it will breed or die of old age.
      * @param newRabbits A list to return newly born rabbits.
      */
+    @Override
     public void act(List<Animal> newRabbits)
     {
         incrementAge();
         if(isAlive()) {
-            giveBirth(newRabbits);            
+             giveBirth(newRabbits);            
             // Try to move into a free location.
             Location newLocation = getField().freeAdjacentLocation(getLocation());
             if(newLocation != null) {
                 setLocation(newLocation);
-            }
-            else {
+            } else {
                 // Overcrowding.
                 setDead();
             }
@@ -76,27 +76,13 @@ public class Rabbit extends Animal
     protected int getMaxAge(){
         return MAX_AGE;
     }
-    
     /**
-     * Check whether or not this rabbit is to give birth at this step.
-     * New births will be made into free adjacent locations.
-     * @param newRabbits A list to return newly born rabbits.
+     * @author Hamid Nazir
+     * Animal.giveBirth() will use this to add a new Rabbit of the proper type.
      */
-    private void giveBirth(List<Animal> newRabbits)
-    {
-        // New rabbits are born into adjacent locations.
-        // Get a list of adjacent free locations.
-        Field field = getField();
-        List<Location> free = field.getFreeAdjacentLocations(getLocation());
-        int births = breed();
-        for(int b = 0; b < births && free.size() > 0; b++) {
-            Location loc = free.remove(0);
-            Rabbit young = new Rabbit(false, field, loc);
-            newRabbits.add(young);
-        }
-    }
+    @Override protected Animal createYoung(Field field, Location loc) { 
+        return new Rabbit(false, field, loc); }
         
-
     /** 
      * @author Donovan Guerra
      * Returns the breeding age of the rabbit.
@@ -108,16 +94,16 @@ public class Rabbit extends Animal
     }
 
     /**
-     * @author Donovan Guerra
+     * @author Donovan Guerra and Hamid Nazir
      * @return the breeding probability of the rabbit.
      * @return the max litter size of the rabbit.
      */
     @Override
-    protected double BREEDING_PROBABILITY(){
+    protected double getBreedingProbability(){
         return BREEDING_PROBABILITY;
     }
     @Override
-    protected int MAX_LITTER_SIZE(){
+    protected int getMaxLitterSize(){
         return MAX_LITTER_SIZE;
     }
 }

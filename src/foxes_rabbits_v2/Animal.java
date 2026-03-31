@@ -24,11 +24,11 @@ public abstract class Animal
     // The age of the animal.
     private int age;
     //The breeding probability of the animal.
-    abstract protected double BREEDING_PROBABILITY();
+    abstract protected double getBreedingProbability();
     // The max litter size of the animal.
-    abstract protected int MAX_LITTER_SIZE();
+    abstract protected int getMaxLitterSize();
     // A shared random number generator to control breeding.
-     protected static final Random rand = Randomizer.getRandom();
+    protected static final Random rand = Randomizer.getRandom();
 
 
     /**
@@ -160,6 +160,7 @@ public abstract class Animal
      * @return The max age of the animal.
      */
     protected abstract int getMaxAge();
+    protected abstract Animal createYoung(Field field, Location loc);
 
     /**
      * @author Donovan Guerra
@@ -168,9 +169,27 @@ public abstract class Animal
     protected int breed()
     {
         int births = 0;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY()) {
-            births = rand.nextInt(MAX_LITTER_SIZE()) + 1;
+        if(canBreed() && rand.nextDouble() <= getBreedingProbability()) {
+            births = rand.nextInt(getMaxLitterSize()) + 1;
         }
         return births;
     }
+
+    /**
+     *  @author Hamid Nazir
+     * giveBirth method moved to Animal
+     */
+    protected void giveBirth(List<Animal> newAnimals)
+    {
+        Field field = getField();
+        List<Location> free = field.getFreeAdjacentLocations(getLocation());
+        int births = breed();
+        for(int b = 0; b < births && free.size() > 0; b++) {
+            Location loc = free.remove(0);
+            Animal young = createYoung(field, loc);
+            newAnimals.add(young);
+        }
+    }
 }
+
+    

@@ -1,72 +1,63 @@
 package foxes_rabbits_v2;
 
 import java.util.List;
-import java.util.Iterator;
 import java.util.Random;
+import java.util.Iterator;
 
 /**
- * A simple model of a fox.
- * Foxes age, move, eat rabbits, and die.
+ * A simple model of a rabbit.
+ * Rabbits age, move, hunt, breed, and die.
  * 
  * @author David J. Barnes and Michael Kölling
  * @version 2011.07.31
  */
-public class Fox extends Animal
-{
-    // Characteristics shared by all foxes (class variables).
-    
-    // The age at which a fox can start to breed.
-    private static final int BREEDING_AGE = 15;
-    // The age to which a fox can live.
-    private static final int MAX_AGE = 150;
-    // The likelihood of a fox breeding.
-    private static final double BREEDING_PROBABILITY = 0.08;
-    // The maximum number of births.
-    private static final int MAX_LITTER_SIZE = 2;
-    // The food value of a single rabbit. In effect, this is the
-    // number of steps a fox can go before it has to eat again.
-    private static final int RABBIT_FOOD_VALUE = 9;
-    
-    // Individual characteristics (instance fields).
- 
-    // The fox's food level, which is increased by eating rabbits.
-    private int foodLevel;
+public class Weasel extends Animal {
+    // Characteristics shared by all Weasels (class variables).
 
+    // The age at which a Weasel can start to breed.
+    private static final int BREEDING_AGE = 2;
+    // The age to which a Weasel can live.
+    private static final int MAX_AGE = 30;
+    // The likelihood of a Weasel breeding.
+    private static final double BREEDING_PROBABILITY = 0.4;
+    // The maximum number of births.
+    private static final int MAX_LITTER_SIZE = 1;
+    // The food value of a single rabbit. In effect, this is the
+    // number of steps a weasel can go before it has to eat again.
+    private static final int RABBIT_FOOD_VALUE = 3;
+    // Individual characteristics (instance fields).
+    private int foodLevel;
     /**
-     * Create a fox. A fox can be created as a new born (age zero
-     * and not hungry) or with a random age and food level.
+     * Create a new weasel. A weasel may be created with age
+     * zero (a new born) or with a random age.
      * 
-     * @param randomAge If true, the fox will have random age and hunger level.
+     * @param randomAge If true, the rabbit will have a random age.
      * @param field The field currently occupied.
      * @param location The location within the field.
-     * @author Donovan Guerra
      */
-    public Fox(boolean randomAge, Field field, Location location)
+    public Weasel(boolean randomAge, Field field, Location location)
     {
         super(field, location);
         if(randomAge) {
             setAge(rand.nextInt(MAX_AGE));
             foodLevel = rand.nextInt(RABBIT_FOOD_VALUE);
         }
-        else {
+        else{
             setAge(0);
             foodLevel = RABBIT_FOOD_VALUE;
         }
     }
     
     /**
-     * This is what the fox does most of the time: it hunts for
-     * rabbits. In the process, it might breed, die of hunger,
-     * or die of old age.
-     * @param field The field currently occupied.
-     * @param newFoxes A list to return newly born foxes.
+     * This is what the Weasel does most of the time - it runs 
+     * around, and hunts. Sometimes it will breed or die of old age.
+     * @param newWeasels A list to return newly born Weasel.
      */
-    public void act(List<Animal> newFoxes)
-    {
+    public void act(List<Animal> newWeasels) {
         incrementAge();
         incrementHunger();
         if(isAlive()) {
-            giveBirth(newFoxes);            
+            giveBirth(newWeasels);            
             // Move towards a source of food if found.
             Location newLocation = findFood();
             if(newLocation == null) { 
@@ -83,20 +74,24 @@ public class Fox extends Animal
             }
         }
     }
+     /**
+      * @author Hamid Nazir
+      * Called by Animal superclass when a birth happens.
+      */
+    @Override
+    protected Animal createYoung(Field field, Location loc) {
+        return new Weasel(false, field, loc);
+    }
 
     /**
      * @author Donovan Guerra
      * Altered the incrementAge method to getMaxAge instead.
-     * @return the max age of the fox.
+     * Returns max age of the weasel.
      */
     @Override
     protected int getMaxAge(){
         return MAX_AGE;
     }
-    
-    /**
-     * Make this fox more hungry. This could result in the fox's death.
-     */
     private void incrementHunger()
     {
         foodLevel--;
@@ -104,14 +99,7 @@ public class Fox extends Animal
             setDead();
         }
     }
-    
-    /**
-     * Look for rabbits adjacent to the current location.
-     * Only the first live rabbit is eaten.
-     * @return Where food was found, or null if it wasn't.
-     */
-    private Location findFood()
-    {
+    private Location findFood() {
         Field field = getField();
         List<Location> adjacent = field.adjacentLocations(getLocation());
         Iterator<Location> it = adjacent.iterator();
@@ -130,36 +118,32 @@ public class Fox extends Animal
         }
         return null;
     }
-    
-    /**
-     * @author Hamid Nazir
-     * Called by Animal superclass when a birth happens.
-     */
-    @Override protected Animal createYoung(Field field, Location loc) { 
-        return new Fox(false, field, loc); }
-
-    /** 
+        
+ 
+       /** 
      * @author Donovan Guerra
-     * Returns the breeding age of the fox.
-     * @return The breeding age of the fox.
+     * Returns the breeding age of the rabbit.
+     * @return The breeding age of the rabbit.
      */
     @Override
     protected int getBreedingAge() {
-        return BREEDING_AGE;
+        return BREEDING_AGE;    
     }
 
     /**
-     * @author Donovan Guerra and Hamid Nazir
-     * @return the breeding probability of the fox.
-     * @return the max litter size of the fox.
+     * @author Donovan Guerra
+     * @return the breeding probability of the rabbit.
+     * @return the max litter size of the rabbit.
      */
     @Override
-    protected double getBreedingProbability() {
+    protected double getBreedingProbability(){
         return BREEDING_PROBABILITY;
     }
     @Override
     protected int getMaxLitterSize(){
         return MAX_LITTER_SIZE;
     }
+
+    
 }
 
